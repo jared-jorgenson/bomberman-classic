@@ -3,12 +3,12 @@ from character import *
 
 pygame.init()
 
-screen_width = 800
-screen_height = 672
+screen_width = 480
+screen_height = 352
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Classic Bomberman")
-background_file = "test_map.png"
+background_file = "2player_bomberman_map.png"
 bg = pygame.image.load(background_file)
 
 clock = pygame.time.Clock()
@@ -29,8 +29,8 @@ def redrawGameWindow():
 #####################
 # define characters #
 #####################
-player1 = player(60,60,32,32,5)
-player2 = player(710,550,32,32,5)
+player1 = player(34,34,28,28,5)
+player2 = player(418,288,28,28,5)
 #bomb1 = bomb(player1.x, player1.y, 32, 32)
 bombs1 = []
 bombs2 = []
