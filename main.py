@@ -35,8 +35,6 @@ player1 = player(34, 34, 28, 28, 5, 1)
 player2 = player(418, 288, 28, 28, 5, 2)
 bombs1 = []
 bombs2 = []
-bomb_count1 = 0
-bomb_count2 = 0
 #############
 # main loop #
 #############
