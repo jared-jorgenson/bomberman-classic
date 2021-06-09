@@ -47,14 +47,14 @@ while run:
             run = False
 
     for weapon in bombs1:
-        if weapon.bomb_count > 30:
+        if weapon.bomb_count > 60:
             bombs1.pop(bombs1.index(weapon))
             weapon.bomb_count = 0
         else:
             weapon.bomb_count += 1
 
     for weapon in bombs2:
-        if weapon.bomb_count > 30:
+        if weapon.bomb_count > 60:
             bombs2.pop(bombs2.index(weapon))
             weapon.bomb_count = 0
         else:
@@ -124,16 +124,12 @@ while run:
     # player1
     if keys[pygame.K_SPACE]:
         if len(bombs1) < 1:
-            explosioncoords1 = (player1.x - player1.x % 32,
-                               player1.y - player1.y % 32)
-            bombs1.append(bomb((player1.x - player1.x % 32),
+            bombs1.append(bomb((player1.x - player1.x % 32+3),
                                (player1.y - player1.y % 32), 32, 32, 0))
     # player2
     if keys[pygame.K_SLASH]:
         if len(bombs2) < 1:
-            explosioncoords2 = (player2.x - player2.x % 32),
-            (player2.y - player2.y % 32)
-            bombs2.append(bomb((player2.x - player2.x % 32),
+            bombs2.append(bomb((player2.x - player2.x % 32+2),
                                (player2.y - player2.y % 32), 32, 32, 0))
 
     redrawGameWindow()

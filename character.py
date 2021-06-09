@@ -51,4 +51,7 @@ class bomb(object):
 		self.bomb_count = bomb_count
 
 	def draw(self, screen):
-		screen.blit(pygame.image.load('Images/bomb.png'), (self.x, self.y))
+		if self.bomb_count < 30:
+			screen.blit(pygame.image.load('Images/bomb.png'), (self.x, self.y))
+		else:
+			screen.blit(pygame.image.load('Images/explosion.png'), (self.x, self.y))
