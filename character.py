@@ -1,18 +1,38 @@
-# Character classes
 import pygame
 
 class player(object):
-	def __init__(self,x,y,width,height,vel):
+	def __init__(self,x,y,width,height,vel,number):
 		self.x = x
 		self.y = y
 		self.width = width
 		self.height = height
 		self.vel = vel
+		self.number = number
+		self.front = True
+		self.back = False
+		self.left = False
+		self.right = False
 
 	def draw(self, screen):
-		pygame.draw.rect(screen, (255,0,0), (
-			self.x, self.y, self.width, self.height)
-		)   
+		if self.number == 1:
+			if self.front:
+				screen.blit(pygame.image.load('p1front.png'), (self.x, self.y))
+			elif self.back:
+				screen.blit(pygame.image.load('p1back.png'), (self.x, self.y))
+			elif self.left:
+				screen.blit(pygame.image.load('p1left.png'), (self.x, self.y))
+			else:
+				screen.blit(pygame.image.load('p1right.png'), (self.x, self.y))
+		elif self.number == 2:
+			if self.front:
+				screen.blit(pygame.image.load('p2front.png'), (self.x, self.y))
+			elif self.back:
+				screen.blit(pygame.image.load('p2back.png'), (self.x, self.y))
+			elif self.left:
+				screen.blit(pygame.image.load('p2left.png'), (self.x, self.y))
+			else:
+				screen.blit(pygame.image.load('p2right.png'), (self.x, self.y))
+
 
 class bomb(object):
 	def __init__(self,x,y,width,height):
@@ -22,7 +42,4 @@ class bomb(object):
 		self.height = height
 
 	def draw(self, screen):
-		pygame.draw.rect(screen, (0,0,255), (
-			self.x, self.y, self.width, self.height)
-		)
-
+		screen.blit(pygame.image.load('bomb.png'), (self.x, self.y))
