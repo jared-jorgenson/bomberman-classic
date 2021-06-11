@@ -18,6 +18,8 @@ def redrawGameWindow():
     screen.blit(bg, (0, 0))
     player1.draw(screen)
     player2.draw(screen)
+    for i in hitboxes:
+        i.draw(screen)
 
     for bomb in bombs1:
         bomb.draw(screen)
@@ -32,9 +34,13 @@ def redrawGameWindow():
 # define characters #
 #####################
 player1 = player(34, 34, 28, 28, 5, 1)
-player2 = player(418, 288, 28, 28, 5, 2)
+player2 = player(419, 289, 28, 28, 5, 2)
 bombs1 = []
 bombs2 = []
+hitboxes = []
+for i in range(1,7):
+    for j in range(1,5):
+        hitboxes.append(blockHitbox(64*i,64*j))
 #############
 # main loop #
 #############
@@ -63,28 +69,28 @@ while run:
     keys = pygame.key.get_pressed()
 
     # Key Strokes for Player 1
-    if keys[pygame.K_a]:
+    if keys[pygame.K_a] and player1.x > 32:
         player1.x -= player1.vel
         player1.left = True
         player1.front = False
         player1.back = False
         player1.right = False
 
-    if keys[pygame.K_d]:
+    if keys[pygame.K_d] and player1.x < 420:
         player1.x += player1.vel
         player1.left = False
         player1.front = False
         player1.back = False
         player1.right = True
 
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] and player1.y > 34:
         player1.y -= player1.vel
         player1.left = False
         player1.front = False
         player1.back = True
         player1.right = False
 
-    if keys[pygame.K_s]:
+    if keys[pygame.K_s] and player1.y < 289:
         player1.y += player1.vel
         player1.left = False
         player1.front = True
@@ -92,28 +98,28 @@ while run:
         player1.right = False
 
     # Key Strokes for Player 2
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_LEFT] and player2.x > 32:
         player2.x -= player2.vel
         player2.left = True
         player2.front = False
         player2.back = False
         player2.right = False
 
-    if keys[pygame.K_RIGHT]:
+    if keys[pygame.K_RIGHT] and player2.x < 420:
         player2.x += player2.vel
         player2.left = False
         player2.front = False
         player2.back = False
         player2.right = True
 
-    if keys[pygame.K_UP]:
+    if keys[pygame.K_UP] and player2.y > 34:
         player2.y -= player2.vel
         player2.left = False
         player2.front = False
         player2.back = True
         player2.right = False
 
-    if keys[pygame.K_DOWN]:
+    if keys[pygame.K_DOWN] and player2.y < 289:
         player2.y += player2.vel
         player2.left = False
         player2.front = True
@@ -125,12 +131,12 @@ while run:
     if keys[pygame.K_SPACE]:
         if len(bombs1) < 1:
             bombs1.append(bomb((player1.x - player1.x % 32+3),
-                               (player1.y - player1.y % 32), 32, 32, 0))
+                               (player1.y - player1.y % 32+1), 32, 32, 0))
     # player2
     if keys[pygame.K_SLASH]:
         if len(bombs2) < 1:
             bombs2.append(bomb((player2.x - player2.x % 32+2),
-                               (player2.y - player2.y % 32), 32, 32, 0))
+                               (player2.y - player2.y % 32+1), 32, 32, 0))
 
     redrawGameWindow()
 
