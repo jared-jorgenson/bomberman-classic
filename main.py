@@ -33,7 +33,7 @@ def redrawGameWindow():
 #####################
 # define characters #
 #####################
-player1 = player(34, 34, 28, 28, 5, 1)
+player1 = player(32, 32, 28, 28, 5, 1)
 player2 = player(419, 289, 28, 28, 5, 2)
 bombs1 = []
 bombs2 = []
@@ -130,13 +130,42 @@ while run:
     # player1
     if keys[pygame.K_SPACE]:
         if len(bombs1) < 1:
-            bombs1.append(bomb((player1.x - player1.x % 32+3),
-                               (player1.y - player1.y % 32+1), 32, 32, 0))
+            # player is left and up
+            if player1.x % 32 < 16 and player1.y % 32 < 16:
+                bombs1.append(bomb((player1.x - player1.x % 32+3),
+                                (player1.y - player1.y % 32+1), 32, 32, 0))
+            # player is left and down
+            elif player1.x % 32 < 16 and player1.y % 32 >= 16:
+                bombs1.append(bomb((player1.x - player1.x % 32+3),
+                                (player1.y - player1.y % 32+33), 32, 32, 0))
+            # player is right and up
+            elif player1.x % 32 >= 16 and player1.y % 32 < 16:
+                bombs1.append(bomb((player1.x - player1.x % 32+35),
+                                (player1.y - player1.y % 32+1), 32, 32, 0))
+            # player is right and down
+            else:
+                bombs1.append(bomb((player1.x - player1.x % 32+35),
+                                (player1.y - player1.y % 32+33), 32, 32, 0))
+
     # player2
     if keys[pygame.K_SLASH]:
         if len(bombs2) < 1:
-            bombs2.append(bomb((player2.x - player2.x % 32+2),
-                               (player2.y - player2.y % 32+1), 32, 32, 0))
+            # player is left and up
+            if player2.x % 32 < 16 and player2.y % 32 < 16:
+                bombs2.append(bomb((player2.x - player2.x % 32+3),
+                                (player2.y - player2.y % 32+1), 32, 32, 0))
+            # player is left and down
+            elif player2.x % 32 < 16 and player2.y % 32 >= 16:
+                bombs2.append(bomb((player2.x - player2.x % 32+3),
+                                (player2.y - player2.y % 32+33), 32, 32, 0))
+            # player is right and up
+            elif player2.x % 32 >= 16 and player2.y % 32 < 16:
+                bombs2.append(bomb((player2.x - player2.x % 32+35),
+                                (player2.y - player2.y % 32+1), 32, 32, 0))
+            # player is right and down
+            else:
+                bombs2.append(bomb((player2.x - player2.x % 32+35),
+                                (player2.y - player2.y % 32+33), 32, 32, 0))
 
     redrawGameWindow()
 
