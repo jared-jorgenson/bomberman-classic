@@ -4,8 +4,8 @@ class Player(pygame.sprite.Sprite):
     # Constructor function
     def __init__(self, x, y, number):
         super().__init__()
-        self.image = pygame.Surface([22, 28], pygame.SRCALPHA, 32)
-        image = self.image.convert_alpha()
+        self.image = pygame.Surface([24, 28])
+        self.image.fill((0,0,0))
 
         self.rect = self.image.get_rect()
         self.rect.y = y

@@ -19,7 +19,7 @@ all_sprite_list = pygame.sprite.Group()
 wall_list = pygame.sprite.Group()
 
 # generate walls
-wall = Wall(0, 0, 32, 352)
+wall = Wall(0, 0, 28, 352)
 wall_list.add(wall)
 all_sprite_list.add(wall)
 
@@ -37,8 +37,8 @@ all_sprite_list.add(wall)
 
 for i in range(1, 7):
     for j in range(1, 5):
-        wall_list.add(Wall(64 * i, 64 * j,32,32))
-        all_sprite_list.add(Wall(64 * i, 64 * j,32,32))
+        wall_list.add(Wall(64 * i, 64 * j,28,32))
+        all_sprite_list.add(Wall(64 * i, 64 * j,28,32))
 
 # generate players
 player1 = Player(34, 34,1)
@@ -53,8 +53,14 @@ bombs1 = []
 bombs2 = []
 
 def redrawGameWindow():
-    all_sprite_list.update()
     screen.blit(bg, (0, 0))
+    placeholder_x1, placeholder_y1 = player1.rect.x, player1.rect.y
+    placeholder_x2, placeholder_y2 = player2.rect.x, player2.rect.y
+    all_sprite_list.update()
+    if player1.rect.colliderect(player2.rect):
+        player1.rect.x, player1.rect.y = placeholder_x1, placeholder_y1
+    if player2.rect.colliderect(player1.rect):
+        player2.rect.x, player2.rect.y = placeholder_x2, placeholder_y2
     player1.draw(screen)
     player2.draw(screen)
     for bomb in bombs1:
