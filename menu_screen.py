@@ -18,7 +18,7 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 # Music
 mixer.init()
 mixer.music.load("sounds/menu_music.mp3")
-mixer.music.set_volume(0.4)
+mixer.music.set_volume(0.1)
 mixer.music.play()
 
 # Text Renderer
@@ -64,7 +64,9 @@ def main_menu():
                     selected="quit"
                 if event.key==pygame.K_RETURN:
                     if selected=="start":
-                        main()
+                        exec(open("main.py").read())
+                        pygame.quit()
+                        quit()
                     if selected=="quit":
                         pygame.quit()
                         quit()
