@@ -54,6 +54,12 @@ bombs2 = []
 
 def redrawGameWindow():
     screen.blit(bg, (0, 0))
+    for bomb in bombs1:
+        bomb.walls = wall_list
+        bomb.draw(screen)
+    for bomb in bombs2:
+        bomb.walls = wall_list
+        bomb.draw(screen)
     placeholder_x1, placeholder_y1 = player1.rect.x, player1.rect.y
     placeholder_x2, placeholder_y2 = player2.rect.x, player2.rect.y
     all_sprite_list.update()
@@ -63,10 +69,6 @@ def redrawGameWindow():
         player2.rect.x, player2.rect.y = placeholder_x2, placeholder_y2
     player1.draw(screen)
     player2.draw(screen)
-    for bomb in bombs1:
-        bomb.draw(screen)
-    for bomb in bombs2:
-        bomb.draw(screen)
 
 def main():
     clock = pygame.time.Clock()

@@ -88,6 +88,15 @@ class bomb(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         self.bomb_count = bomb_count
+        self.walls = None
+        self.leftcheck = self.rect.x - 32
+        self.rightcheck = self.rect.x + self.width
+        self.upcheck = self.rect.y - 32
+        self.downcheck = self.rect.y + self.height
+        self.expleft = True
+        self.expright = True
+        self.expup = True
+        self.expdown = True
 
     def draw(self, screen):
         if self.bomb_count < 30:
@@ -97,4 +106,25 @@ class bomb(pygame.sprite.Sprite):
         elif self.bomb_count < 90:
             screen.blit(pygame.image.load('Images/bomb1.png'), (self.rect.x, self.rect.y))
         else:
+            for i in self.walls:
+                if i.rect.collidepoint(self.leftcheck,self.rect.y):
+                    self.expleft = False
+                if i.rect.collidepoint(self.rightcheck,self.rect.y):
+                    self.expright = False
+                if i.rect.collidepoint(self.rect.x,self.upcheck):
+                    self.expup = False
+                if i.rect.collidepoint(self.rect.x,self.downcheck):
+                    self.expdown = False
             screen.blit(pygame.image.load('Images/explosion.png'), (self.rect.x, self.rect.y))
+            if self.expleft:
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.leftcheck, self.rect.y))
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.leftcheck+16, self.rect.y))
+            if self.expright:
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.rightcheck, self.rect.y))
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.rightcheck-16, self.rect.y))
+            if self.expup:
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.rect.x, self.upcheck))
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.rect.x, self.upcheck+16))
+            if self.expdown:
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.rect.x, self.downcheck))
+                screen.blit(pygame.image.load('Images/explosion.png'), (self.rect.x, self.downcheck-16))
