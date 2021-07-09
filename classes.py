@@ -106,7 +106,7 @@ class bomb(pygame.sprite.Sprite):
             screen.blit(pygame.image.load('Images/bomb2.png'), (self.rect.x, self.rect.y))
         elif self.bomb_count < 90:
             screen.blit(pygame.image.load('Images/bomb1.png'), (self.rect.x, self.rect.y))
-        else:
+        elif self.bomb_count < 120:
             for i in self.walls:
                 if i.rect.collidepoint(self.leftcheck,self.rect.y):
                     self.expleft = False
