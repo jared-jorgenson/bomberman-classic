@@ -57,9 +57,15 @@ def redrawGameWindow():
     for bomb in bombs1:
         bomb.walls = wall_list
         bomb.draw(screen)
+        for expcheck in bomb.expboxlist:
+            if player1.rect.colliderect(expcheck):
+                player1.rect.x = 1000
     for bomb in bombs2:
         bomb.walls = wall_list
         bomb.draw(screen)
+        for expcheck in bomb.expboxlist:
+            if player2.rect.colliderect(expcheck):
+                player2.rect.x = 1000
     placeholder_x1, placeholder_y1 = player1.rect.x, player1.rect.y
     placeholder_x2, placeholder_y2 = player2.rect.x, player2.rect.y
     all_sprite_list.update()
@@ -76,7 +82,6 @@ def main():
     run = True
     #Main Loop
     while run:
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -202,7 +207,6 @@ def main():
                 else:
                     bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
                                     (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
-
         redrawGameWindow()
         pygame.display.flip()
 
