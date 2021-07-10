@@ -1,6 +1,19 @@
 import pygame
+from main import *
 
 class Player(pygame.sprite.Sprite):
+    death = [pygame.image.load('Images/death1.png'), pygame.image.load('Images/death2.png'),
+             pygame.image.load('Images/death3.png'),
+             pygame.image.load('Images/death4.png'), pygame.image.load('Images/death5.png'),
+             pygame.image.load('Images/death6.png'),
+             pygame.image.load('Images/death7.png'), pygame.image.load('Images/death8.png'),
+             pygame.image.load('Images/death9.png'),
+             pygame.image.load('Images/death10.png'), pygame.image.load('Images/death11.png'),
+             pygame.image.load('Images/death12.png'),
+             pygame.image.load('Images/death13.png'), pygame.image.load('Images/death14.png'),
+             pygame.image.load('Images/death15.png'),
+             pygame.image.load('Images/death16.png'), pygame.image.load('Images/death17.png'),
+             pygame.image.load('Images/death18.png')]
     # Constructor function
     def __init__(self, x, y, number):
         super().__init__()
@@ -20,29 +33,34 @@ class Player(pygame.sprite.Sprite):
         self.change_y = 0
         self.walls = None
 
+        self.alive = True
+        self.canmove = True
+        self.deathCount = 0
+
     def changespeed(self, x, y):
         self.change_x += x
         self.change_y += y
 
     def update(self):
-        self.rect.x += self.change_x
-        block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
-        for block in block_hit_list:
-            if self.change_x > 0:
-                self.rect.right = block.rect.left
-            else:
-                self.rect.left = block.rect.right
+        if self.canmove:
+            self.rect.x += self.change_x
+            block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            for block in block_hit_list:
+                if self.change_x > 0:
+                    self.rect.right = block.rect.left
+                else:
+                    self.rect.left = block.rect.right
 
-        self.rect.y += self.change_y
-        block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
-        for block in block_hit_list:
-            if self.change_y > 0:
-                self.rect.bottom = block.rect.top
-            else:
-                self.rect.top = block.rect.bottom
+            self.rect.y += self.change_y
+            block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
+            for block in block_hit_list:
+                if self.change_y > 0:
+                    self.rect.bottom = block.rect.top
+                else:
+                    self.rect.top = block.rect.bottom
 
     def draw(self, screen):
-        if self.number == 1:
+        if self.number == 1 and self.alive:
             if self.front:
                 screen.blit(pygame.image.load('Images/p1front.png'),
                             (self.rect.x, self.rect.y))
@@ -55,7 +73,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 screen.blit(pygame.image.load('Images/p1right.png'),
                             (self.rect.x, self.rect.y))
-        elif self.number == 2:
+        elif self.number == 2 and self.alive:
             if self.front:
                 screen.blit(pygame.image.load('Images/p2front.png'),
                             (self.rect.x, self.rect.y))
@@ -68,6 +86,14 @@ class Player(pygame.sprite.Sprite):
             else:
                 screen.blit(pygame.image.load('Images/p2right.png'),
                             (self.rect.x, self.rect.y))
+        if self.alive == False and self.deathCount < 180:
+            screen.blit(self.death[self.deathCount // 10], (self.rect.x, self.rect.y))
+            self.deathCount += 1
+        if self.deathCount >= 180:
+            self.rect.x = 1000
+
+
+
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height):
         super().__init__()

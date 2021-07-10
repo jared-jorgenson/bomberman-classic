@@ -46,7 +46,6 @@ player2 = Player(419,289,2)
 player1.walls = wall_list
 player2.walls = wall_list
 
-
 all_sprite_list.add(player1)
 all_sprite_list.add(player2)
 bombs1 = []
@@ -59,17 +58,21 @@ def redrawGameWindow():
         bomb.draw(screen)
         for expcheck in bomb.expboxlist:
             if player1.rect.colliderect(expcheck):
-                player1.rect.x = 1000
+                player1.alive = False
+                player1.canmove = False
             elif player2.rect.colliderect(expcheck):
-                player2.rect.x=1000
+                player2.alive = False
+                player2.canmove = False
     for bomb in bombs2:
         bomb.walls = wall_list
         bomb.draw(screen)
         for expcheck in bomb.expboxlist:
             if player2.rect.colliderect(expcheck):
-                player2.rect.x = 1000
+                player2.alive = False
+                player2.canmove = False
             elif player1.rect.colliderect(expcheck):
-                player1.rect.x=1000
+                player1.alive = False
+                player1.canmove = False
     placeholder_x1, placeholder_y1 = player1.rect.x, player1.rect.y
     placeholder_x2, placeholder_y2 = player2.rect.x, player2.rect.y
     all_sprite_list.update()
