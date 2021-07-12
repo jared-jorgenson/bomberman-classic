@@ -13,7 +13,8 @@ class Player(pygame.sprite.Sprite):
              pygame.image.load('Images/death13.png'), pygame.image.load('Images/death14.png'),
              pygame.image.load('Images/death15.png'),
              pygame.image.load('Images/death16.png'), pygame.image.load('Images/death17.png'),
-             pygame.image.load('Images/death18.png')]
+             pygame.image.load('Images/death18.png'),pygame.image.load('Images/death19.png'),
+             pygame.image.load('Images/death20.png')]
     # Constructor function
     def __init__(self, x, y, number):
         super().__init__()
@@ -86,13 +87,11 @@ class Player(pygame.sprite.Sprite):
             else:
                 screen.blit(pygame.image.load('Images/p2right.png'),
                             (self.rect.x, self.rect.y))
-        if self.alive == False and self.deathCount < 180:
+        if self.alive == False and self.deathCount < 200:
             screen.blit(self.death[self.deathCount // 10], (self.rect.x, self.rect.y))
             self.deathCount += 1
-        if self.deathCount >= 180:
+        if self.deathCount >= 200:
             self.rect.x = 1000
-
-
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height):
@@ -114,6 +113,7 @@ class bomb(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         self.bomb_count = bomb_count
+
         self.walls = None
         self.leftcheck = self.rect.x - 32
         self.rightcheck = self.rect.x + self.width

@@ -82,13 +82,21 @@ def redrawGameWindow():
         player2.rect.x, player2.rect.y = placeholder_x2, placeholder_y2
     player1.draw(screen)
     player2.draw(screen)
-
 def main():
     clock = pygame.time.Clock()
-
     run = True
+    bomb1quantity = 0
+    bomb2quantity = 0
     #Main Loop
     while run:
+        if bomb1quantity > 0:
+            bomb1quantity += 1
+        if bomb1quantity > 30:
+            bomb1quantity = 0
+        if bomb2quantity > 0:
+            bomb2quantity += 1
+        if bomb2quantity > 30:
+            bomb2quantity = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -177,43 +185,43 @@ def main():
         keys = pygame.key.get_pressed()
         # bomb mechanics
         # player1
-        if keys[pygame.K_SPACE]:
-            if len(bombs1) < 1:
-                # player is left and up
-                if player1.rect.x % 32 < 16 and player1.rect.y % 32 < 16:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
-                                    (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0))
-                # player is left and down
-                elif player1.rect.x % 32 < 16 and player1.rect.y % 32 >= 16:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
-                                    (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
-                # player is right and up
-                elif player1.rect.x % 32 >= 16 and player1.rect.y % 32 < 16:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
-                                    (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0))
-                # player is right and down
-                else:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
-                                    (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
+        if keys[pygame.K_SPACE] and bomb1quantity == 0:
+            # player is left and up
+            if player1.rect.x % 32 < 16 and player1.rect.y % 32 < 16:
+                bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
+                                (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0))
+            # player is left and down
+            elif player1.rect.x % 32 < 16 and player1.rect.y % 32 >= 16:
+                bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
+                                (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
+            # player is right and up
+            elif player1.rect.x % 32 >= 16 and player1.rect.y % 32 < 16:
+                bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
+                                (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0))
+            # player is right and down
+            else:
+                bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
+                                (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
+            bomb1quantity = 1
         # player2
-        if keys[pygame.K_SLASH]:
-            if len(bombs2) < 1:
-                # player is left and up
-                if player2.rect.x % 32 < 16 and player2.rect.y % 32 < 16:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
-                                    (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0))
-                # player is left and down
-                elif player2.rect.x % 32 < 16 and player2.rect.y % 32 >= 16:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
-                                    (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
-                # player is right and up
-                elif player2.rect.x % 32 >= 16 and player2.rect.y % 32 < 16:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
-                                    (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0))
-                # player is right and down
-                else:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
-                                    (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
+        if keys[pygame.K_SLASH] and bomb2quantity == 0:
+            # player is left and up
+            if player2.rect.x % 32 < 16 and player2.rect.y % 32 < 16:
+                bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
+                                (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0))
+            # player is left and down
+            elif player2.rect.x % 32 < 16 and player2.rect.y % 32 >= 16:
+                bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
+                                (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
+            # player is right and up
+            elif player2.rect.x % 32 >= 16 and player2.rect.y % 32 < 16:
+                bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
+                                (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0))
+            # player is right and down
+            else:
+                bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
+                                (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
+            bomb2quantity = 1
         redrawGameWindow()
         pygame.display.flip()
 
