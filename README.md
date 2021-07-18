@@ -3,6 +3,7 @@ This 2-person project is an attempt to re-create the classic arcade game Bomberm
 
 
 ## How to play
+The aim of this 2-player game is to kill your opponent before being killed. You can drop bombs that blow up and if your player collides with the explosion you are killed.
 
 ### Player 1
 - [ Arrow Keys ] for movement
