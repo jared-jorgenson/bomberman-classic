@@ -1,5 +1,5 @@
 import pygame
-from main import *
+
 
 class Player(pygame.sprite.Sprite):
     death = [pygame.image.load('Images/death1.png'), pygame.image.load('Images/death2.png'),
@@ -91,7 +91,11 @@ class Player(pygame.sprite.Sprite):
             screen.blit(self.death[self.deathCount // 10], (self.rect.x, self.rect.y))
             self.deathCount += 1
         if self.deathCount >= 200:
-            self.rect.x = 1000
+            #self.rect.x = 1000
+            pygame.quit()
+            #exec(open("menu_screen.py").read())
+            quit()
+
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height):
