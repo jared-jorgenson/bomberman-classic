@@ -1,5 +1,5 @@
 # Bomberman Arcade Game
-This 2-person project is an attempt to re-create the classic arcade game Bomberman. We used Pygame to develop the game. The game is currently in a playable state but we are still developing additional features for the game.
+This 2-person project is an attempt to re-create the classic arcade game Bomberman. The game is currently in a playable state but we are still developing additional features for the game. The primary library we used as a framework in the project is Pygame.
 
 
 ## How to play
