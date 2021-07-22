@@ -37,6 +37,7 @@ class Player(pygame.sprite.Sprite):
         self.alive = True
         self.canmove = True
         self.deathCount = 0
+        self.gotomenu=False
 
     def changespeed(self, x, y):
         self.change_x += x
@@ -91,10 +92,16 @@ class Player(pygame.sprite.Sprite):
             screen.blit(self.death[self.deathCount // 10], (self.rect.x, self.rect.y))
             self.deathCount += 1
         if self.deathCount >= 200:
-            #self.rect.x = 1000
-            pygame.quit()
-            #exec(open("menu_screen.py").read())
-            quit()
+            self.rect.x = 1000
+            self.gotomenu=True
+    def reset(self,x,y):
+        self.gotomenu = False
+        self.alive = True
+        self.deathCount = 0
+        self.rect.x = x
+        self.rect.y = y
+        self.canmove = True
+        self.front = True
 
 
 class Wall(pygame.sprite.Sprite):
