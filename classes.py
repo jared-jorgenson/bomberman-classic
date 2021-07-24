@@ -202,6 +202,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
         self.canmove = True
         self.front = True
+        self.change_x=0
+        self.change_y=0
 
 
 class Wall(pygame.sprite.Sprite):
