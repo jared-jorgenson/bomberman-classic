@@ -160,52 +160,20 @@ def main():
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
                         player1.changespeed(-3, 0)
-                        player1.left = True
-                        player1.front = False
-                        player1.back = False
-                        player1.right = False
                     elif event.key == pygame.K_d:
                         player1.changespeed(3, 0)
-                        player1.left = False
-                        player1.front = False
-                        player1.back = False
-                        player1.right = True
                     elif event.key == pygame.K_w:
                         player1.changespeed(0, -3)
-                        player1.left = False
-                        player1.front = False
-                        player1.back = True
-                        player1.right = False
                     elif event.key == pygame.K_s:
                         player1.changespeed(0, 3)
-                        player1.left = False
-                        player1.front = True
-                        player1.back = False
-                        player1.right = False
                     elif event.key == pygame.K_LEFT:
                         player2.changespeed(-3, 0)
-                        player2.left = True
-                        player2.front = False
-                        player2.back = False
-                        player2.right = False
                     elif event.key == pygame.K_RIGHT:
                         player2.changespeed(3, 0)
-                        player2.left = False
-                        player2.front = False
-                        player2.back = False
-                        player2.right = True
                     elif event.key == pygame.K_UP:
                         player2.changespeed(0, -3)
-                        player2.left = False
-                        player2.front = False
-                        player2.back = True
-                        player2.right = False
                     elif event.key == pygame.K_DOWN:
                         player2.changespeed(0, 3)
-                        player2.left = False
-                        player2.front = True
-                        player2.back = False
-                        player2.right = False
 
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_a:

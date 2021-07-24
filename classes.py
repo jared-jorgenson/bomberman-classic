@@ -15,6 +15,38 @@ class Player(pygame.sprite.Sprite):
              pygame.image.load('Images/death16.png'), pygame.image.load('Images/death17.png'),
              pygame.image.load('Images/death18.png'),pygame.image.load('Images/death19.png'),
              pygame.image.load('Images/death20.png')]
+    p1walkLeft = [pygame.image.load('Images/p1left.png'), pygame.image.load('Images/p1left1.png'),
+             pygame.image.load('Images/p1left2.png'),
+             pygame.image.load('Images/p1left3.png'), pygame.image.load('Images/p1left2.png'),
+             pygame.image.load('Images/p1left1.png'), pygame.image.load('Images/p1left.png')]
+    p1walkRight = [pygame.image.load('Images/p1right.png'), pygame.image.load('Images/p1right1.png'),
+                  pygame.image.load('Images/p1right2.png'),
+                  pygame.image.load('Images/p1right3.png'), pygame.image.load('Images/p1right2.png'),
+                  pygame.image.load('Images/p1right1.png'), pygame.image.load('Images/p1right.png')]
+    p1walkFront = [pygame.image.load('Images/p1front.png'), pygame.image.load('Images/p1front1.png'),
+                   pygame.image.load('Images/p1front2.png'),
+                   pygame.image.load('Images/p1front3.png'), pygame.image.load('Images/p1front2.png'),
+                   pygame.image.load('Images/p1front1.png'), pygame.image.load('Images/p1front.png')]
+    p1walkBack = [pygame.image.load('Images/p1back.png'), pygame.image.load('Images/p1back1.png'),
+                   pygame.image.load('Images/p1back2.png'),
+                   pygame.image.load('Images/p1back3.png'), pygame.image.load('Images/p1back2.png'),
+                   pygame.image.load('Images/p1back1.png'), pygame.image.load('Images/p1back.png')]
+    p2walkLeft = [pygame.image.load('Images/p2left.png'), pygame.image.load('Images/p2left1.png'),
+                  pygame.image.load('Images/p2left2.png'),
+                  pygame.image.load('Images/p2left3.png'), pygame.image.load('Images/p2left2.png'),
+                  pygame.image.load('Images/p2left1.png'), pygame.image.load('Images/p2left.png')]
+    p2walkRight = [pygame.image.load('Images/p2right.png'), pygame.image.load('Images/p2right1.png'),
+                   pygame.image.load('Images/p2right2.png'),
+                   pygame.image.load('Images/p2right3.png'), pygame.image.load('Images/p2right2.png'),
+                   pygame.image.load('Images/p2right1.png'), pygame.image.load('Images/p2right.png')]
+    p2walkFront = [pygame.image.load('Images/p2front.png'), pygame.image.load('Images/p2front1.png'),
+                   pygame.image.load('Images/p2front2.png'),
+                   pygame.image.load('Images/p2front3.png'), pygame.image.load('Images/p2front2.png'),
+                   pygame.image.load('Images/p2front1.png'), pygame.image.load('Images/p2front.png')]
+    p2walkBack = [pygame.image.load('Images/p2back.png'), pygame.image.load('Images/p2back1.png'),
+                  pygame.image.load('Images/p2back2.png'),
+                  pygame.image.load('Images/p2back3.png'), pygame.image.load('Images/p2back2.png'),
+                  pygame.image.load('Images/p2back1.png'), pygame.image.load('Images/p2back.png')]
     # Constructor function
     def __init__(self, x, y, number):
         super().__init__()
@@ -32,6 +64,7 @@ class Player(pygame.sprite.Sprite):
 
         self.change_x = 0
         self.change_y = 0
+        self.walkCount = 0
         self.walls = None
 
         self.alive = True
@@ -46,14 +79,33 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         if self.canmove:
             self.rect.x += self.change_x
+            if self.change_x <0:
+                self.left=True
+                self.right=False
+                self.front=False
+                self.back=False
+            elif self.change_x >0:
+                self.left=False
+                self.right=True
+                self.front=False
+                self.back=False
             block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
             for block in block_hit_list:
                 if self.change_x > 0:
                     self.rect.right = block.rect.left
                 else:
                     self.rect.left = block.rect.right
-
             self.rect.y += self.change_y
+            if self.change_y <0:
+                self.left=False
+                self.right=False
+                self.front=False
+                self.back=True
+            elif self.change_y >0:
+                self.left=False
+                self.right=False
+                self.front=True
+                self.back=False
             block_hit_list = pygame.sprite.spritecollide(self, self.walls, False)
             for block in block_hit_list:
                 if self.change_y > 0:
@@ -64,30 +116,78 @@ class Player(pygame.sprite.Sprite):
     def draw(self, screen):
         if self.number == 1 and self.alive:
             if self.front:
-                screen.blit(pygame.image.load('Images/p1front.png'),
-                            (self.rect.x, self.rect.y))
+                if self.change_y == 0:
+                    screen.blit(pygame.image.load('Images/p1front.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p1walkFront[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
             elif self.back:
-                screen.blit(pygame.image.load('Images/p1back.png'),
-                            (self.rect.x, self.rect.y))
+                if self.change_y == 0:
+                    screen.blit(pygame.image.load('Images/p1back.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p1walkBack[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
             elif self.left:
-                screen.blit(pygame.image.load('Images/p1left.png'),
-                            (self.rect.x, self.rect.y))
-            else:
-                screen.blit(pygame.image.load('Images/p1right.png'),
-                            (self.rect.x, self.rect.y))
+                if self.change_x == 0:
+                    screen.blit(pygame.image.load('Images/p1left.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p1walkLeft[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
+            elif self.right:
+                if self.change_x == 0:
+                    screen.blit(pygame.image.load('Images/p1right.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p1walkRight[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
         elif self.number == 2 and self.alive:
             if self.front:
-                screen.blit(pygame.image.load('Images/p2front.png'),
-                            (self.rect.x, self.rect.y))
+                if self.change_y == 0:
+                    screen.blit(pygame.image.load('Images/p2front.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p2walkFront[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
             elif self.back:
-                screen.blit(pygame.image.load('Images/p2back.png'),
-                            (self.rect.x, self.rect.y))
+                if self.change_y == 0:
+                    screen.blit(pygame.image.load('Images/p2back.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p2walkBack[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
             elif self.left:
-                screen.blit(pygame.image.load('Images/p2left.png'),
-                            (self.rect.x, self.rect.y))
-            else:
-                screen.blit(pygame.image.load('Images/p2right.png'),
-                            (self.rect.x, self.rect.y))
+                if self.change_x == 0:
+                    screen.blit(pygame.image.load('Images/p2left.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p2walkLeft[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
+            elif self.right:
+                if self.change_x == 0:
+                    screen.blit(pygame.image.load('Images/p2right.png'),
+                                (self.rect.x, self.rect.y))
+                else:
+                    if self.walkCount + 1 >= 21:
+                        self.walkCount = 0
+                    screen.blit(self.p2walkRight[self.walkCount // 3], (self.rect.x, self.rect.y))
+                    self.walkCount += 1
         if self.alive == False and self.deathCount < 200:
             screen.blit(self.death[self.deathCount // 10], (self.rect.x, self.rect.y))
             self.deathCount += 1
