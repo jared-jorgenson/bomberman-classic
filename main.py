@@ -1,4 +1,5 @@
 import pygame
+import secrets
 from classes import *
 from pygame import mixer
 
@@ -34,6 +35,17 @@ wall_list.add(wall)
 for i in range(1, 7):
     for j in range(1, 5):
         wall_list.add(Wall(64 * i, 64 * j,28,32))
+#Create list of all possible powerup coordinates
+powerupcoords=[]
+for i in range(1,14):
+    for j in range(1,10):
+        powerupcoords.append((i*32+2,j*32+2))
+for i in range(1, 7):
+    for j in range(1, 5):
+        powerupcoords.remove((i*64+2,j*64+2))
+#Defining these here because code crashes otherwise, they're just placeholders
+randompowerupcoords = (0,0)
+speedboost=powerup(randompowerupcoords[0],randompowerupcoords[1])
 
 # generate players
 player1 = Player(34, 34,1)
@@ -59,6 +71,7 @@ def text_format(message, textFont, textSize, textColor):
     return newText
 def redrawGameWindow():
     screen.blit(bg, (0, 0))
+    #Draw any bombs, detect collisions between players and explosions
     for bomb in bombs1:
         bomb.walls = wall_list
         bomb.draw(screen)
@@ -79,6 +92,7 @@ def redrawGameWindow():
             elif player1.rect.colliderect(expcheck):
                 player1.alive = False
                 player1.canmove = False
+    #Detect collisions between player and player
     placeholder_x1, placeholder_y1 = player1.rect.x, player1.rect.y
     placeholder_x2, placeholder_y2 = player2.rect.x, player2.rect.y
     player1.update()
@@ -87,8 +101,32 @@ def redrawGameWindow():
         player1.rect.x, player1.rect.y = placeholder_x1, placeholder_y1
     if player2.rect.colliderect(player1.rect):
         player2.rect.x, player2.rect.y = placeholder_x2, placeholder_y2
+    #Draw players, increment time with superspeed
     player1.draw(screen)
+    if player1.superspeed:
+        player1.superspeedcount+=1
     player2.draw(screen)
+    if player2.superspeed:
+        player2.superspeedcount+=1
+    #Powerups
+    speedboost.spawntimer+=1
+    if player1.rect.colliderect(speedboost.rect):
+        speedboost.exists=False
+        player1.superspeed=True
+    if player2.rect.colliderect(speedboost.rect):
+        speedboost.exists=False
+        player2.superspeed = True
+    if speedboost.exists==False:
+        speedboost.respawntimer+=1
+    if speedboost.respawntimer>200:
+        speedboost.exists=True
+        speedboost.respawntimer=0
+        randompowerupcoords = secrets.choice(powerupcoords)
+        while abs(randompowerupcoords[0] - player1.rect.x) < 16 or abs(randompowerupcoords[0] - player2.rect.x) < 16:
+            randompowerupcoords = secrets.choice(powerupcoords)
+        speedboost.rect.x = randompowerupcoords[0]
+        speedboost.rect.y = randompowerupcoords[1]
+    speedboost.draw(screen)
 def main():
     clock = pygame.time.Clock()
     FPS = 30
@@ -101,6 +139,13 @@ def main():
     #Main Loop
     while run:
         if menu:
+            #Resetting anything that changes during the game
+            randompowerupcoords = secrets.choice(powerupcoords)
+            while abs(randompowerupcoords[0]-player1.rect.x) < 16 or abs(randompowerupcoords[0]-player2.rect.x) < 16:
+                randompowerupcoords = secrets.choice(powerupcoords)
+            speedboost.rect.x = randompowerupcoords[0]
+            speedboost.rect.y = randompowerupcoords[1]
+            speedboost.reset()
             player1.reset(34,34)
             player2.reset(419,289)
             for event in pygame.event.get():
@@ -159,39 +204,39 @@ def main():
                     run = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_a:
-                        player1.changespeed(-3, 0)
+                        player1.changespeed(-player1.speed, 0)
                     elif event.key == pygame.K_d:
-                        player1.changespeed(3, 0)
+                        player1.changespeed(player1.speed, 0)
                     elif event.key == pygame.K_w:
-                        player1.changespeed(0, -3)
+                        player1.changespeed(0, -player1.speed)
                     elif event.key == pygame.K_s:
-                        player1.changespeed(0, 3)
+                        player1.changespeed(0, player1.speed)
                     elif event.key == pygame.K_LEFT:
-                        player2.changespeed(-3, 0)
+                        player2.changespeed(-player2.speed, 0)
                     elif event.key == pygame.K_RIGHT:
-                        player2.changespeed(3, 0)
+                        player2.changespeed(player2.speed, 0)
                     elif event.key == pygame.K_UP:
-                        player2.changespeed(0, -3)
+                        player2.changespeed(0, -player2.speed)
                     elif event.key == pygame.K_DOWN:
-                        player2.changespeed(0, 3)
+                        player2.changespeed(0, player2.speed)
 
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_a:
-                        player1.changespeed(3, 0)
+                        player1.changespeed(player1.speed, 0)
                     elif event.key == pygame.K_d:
-                        player1.changespeed(-3, 0)
+                        player1.changespeed(-player1.speed, 0)
                     elif event.key == pygame.K_w:
-                        player1.changespeed(0, 3)
+                        player1.changespeed(0, player1.speed)
                     elif event.key == pygame.K_s:
-                        player1.changespeed(0, -3)
+                        player1.changespeed(0, -player1.speed)
                     elif event.key == pygame.K_LEFT:
-                        player2.changespeed(3, 0)
+                        player2.changespeed(player2.speed, 0)
                     elif event.key == pygame.K_RIGHT:
-                        player2.changespeed(-3, 0)
+                        player2.changespeed(-player2.speed, 0)
                     elif event.key == pygame.K_UP:
-                        player2.changespeed(0, 3)
+                        player2.changespeed(0, player2.speed)
                     elif event.key == pygame.K_DOWN:
-                        player2.changespeed(0, -3)
+                        player2.changespeed(0, -player2.speed)
 
             for weapon in bombs1:
                 if weapon.bomb_count > 120:

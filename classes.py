@@ -72,9 +72,19 @@ class Player(pygame.sprite.Sprite):
         self.deathCount = 0
         self.gotomenu=False
 
+        self.speed=3
+        self.superspeed=False
+        self.superspeedcount=0
+
     def changespeed(self, x, y):
         self.change_x += x
         self.change_y += y
+        if self.superspeed and self.change_x==0 and self.change_y==0:
+            self.speed=6
+            if self.superspeedcount>=150:
+                self.superspeed = False
+                self.speed=3
+                self.superspeedcount=0
 
     def update(self):
         if self.canmove:
@@ -204,8 +214,8 @@ class Player(pygame.sprite.Sprite):
         self.front = True
         self.change_x=0
         self.change_y=0
-
-
+        self.superspeed=False
+        self.speed=3
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height):
         super().__init__()
@@ -215,6 +225,30 @@ class Wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
+class powerup(pygame.sprite.Sprite):
+    superspeedanimation=[pygame.image.load('Images/superspeed1.png'), pygame.image.load('Images/superspeed2.png'),
+             pygame.image.load('Images/superspeed3.png'), pygame.image.load('Images/superspeed3.png'),
+             pygame.image.load('Images/superspeed2.png'), pygame.image.load('Images/superspeed1.png')]
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface([22, 28], pygame.SRCALPHA, 32)
+        image = self.image.convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+        self.spawntimer=0
+        self.respawntimer=0
+        self.exists=True
+        self.animationcount=0
+    def draw(self, screen):
+        if self.exists and self.spawntimer>50:
+            if self.animationcount + 1 >= 30:
+                self.animationcount = 0
+            screen.blit(self.superspeedanimation[self.animationcount // 5], (self.rect.x, self.rect.y))
+            self.animationcount += 1
+    def reset(self):
+        self.spawntimer=0
+        self.exists=True
 class bomb(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, bomb_count):
         super().__init__()
