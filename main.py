@@ -134,6 +134,8 @@ def main():
     bomb1quantity = 0
     bomb2quantity = 0
     menu = True
+    p1_win = False
+    p2_win = False
     game = False
     selected = "start"
     #Main Loop
@@ -161,6 +163,8 @@ def main():
                         if selected == "start":
                             menu=False
                             game=True
+                            p1_win=False
+                            p2_win=False
                         if selected == "quit":
                             pygame.quit()
                             quit()
@@ -187,10 +191,128 @@ def main():
             pygame.display.update()
             clock.tick(FPS)
             pygame.display.set_caption("Bomberman Classic")
+
+        elif p1_win:
+            #Resetting anything that changes during the game
+            randompowerupcoords = secrets.choice(powerupcoords)
+            while abs(randompowerupcoords[0]-player1.rect.x) < 16 or abs(randompowerupcoords[0]-player2.rect.x) < 16:
+                randompowerupcoords = secrets.choice(powerupcoords)
+            speedboost.rect.x = randompowerupcoords[0]
+            speedboost.rect.y = randompowerupcoords[1]
+            speedboost.reset()
+            player1.reset(34,34)
+            player2.reset(419,289)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        selected = "Main Menu"
+                    elif event.key == pygame.K_DOWN:
+                        selected = "Play Again"
+                    if event.key == pygame.K_RETURN:
+                        if selected == "Main Menu":
+                            menu=True
+                            game=False
+                            p1_win=False
+                            p2_win=False
+                        if selected == "Play Again":
+                            menu=False
+                            game=True
+                            p1_win=False
+                            p2_win=False
+
+            # P1 Win UI
+            screen.fill(red)
+            title=text_format("Red Wins", font, 90, black)
+            if selected=="Main Menu":
+                text_start=text_format("Main Menu", font, 75, white)
+            else:
+                text_start = text_format("Main Menu", font, 75, black)
+            if selected=="Play Again":
+                text_quit=text_format("Play Again", font, 75, white)
+            else:
+                text_quit = text_format("Play Again", font, 75, black)
+
+            title_rect=title.get_rect()
+            start_rect=text_start.get_rect()
+            quit_rect=text_quit.get_rect()
+
+            # P1 Win Text
+            screen.blit(title, (screen_width/2 - (title_rect[2]/2), 50))
+            screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 200))
+            screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 260))
+            pygame.display.update()
+            clock.tick(FPS)
+            pygame.display.set_caption("Bomberman Classic")
+
+        elif p2_win:
+            #Resetting anything that changes during the game
+            randompowerupcoords = secrets.choice(powerupcoords)
+            while abs(randompowerupcoords[0]-player1.rect.x) < 16 or abs(randompowerupcoords[0]-player2.rect.x) < 16:
+                randompowerupcoords = secrets.choice(powerupcoords)
+            speedboost.rect.x = randompowerupcoords[0]
+            speedboost.rect.y = randompowerupcoords[1]
+            speedboost.reset()
+            player1.reset(34,34)
+            player2.reset(419,289)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        selected = "Main Menu"
+                    elif event.key == pygame.K_DOWN:
+                        selected = "Play Again"
+                    if event.key == pygame.K_RETURN:
+                        if selected == "Main Menu":
+                            menu=True
+                            game=False
+                            p1_win=False
+                            p2_win=False
+                        if selected == "Play Again":
+                            menu=False
+                            game=True
+                            p1_win=False
+                            p2_win=False
+
+            # P2 Win UI
+            screen.fill(blue)
+            title=text_format("Blue Wins", font, 90, black)
+            if selected=="Main Menu":
+                text_start=text_format("Main Menu", font, 75, white)
+            else:
+                text_start = text_format("Main Menu", font, 75, black)
+            if selected=="Play Again":
+                text_quit=text_format("Play Again", font, 75, white)
+            else:
+                text_quit = text_format("Play Again", font, 75, black)
+
+            title_rect=title.get_rect()
+            start_rect=text_start.get_rect()
+            quit_rect=text_quit.get_rect()
+
+            # P2 Win Text
+            screen.blit(title, (screen_width/2 - (title_rect[2]/2), 50))
+            screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 200))
+            screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 260))
+            pygame.display.update()
+            clock.tick(FPS)
+            pygame.display.set_caption("Bomberman Classic")
+
         elif game:
-            if player1.gotomenu or player2.gotomenu:
+            if player1.gotomenu:
                 game=False
-                menu=True
+                menu=False
+                p1_win=False
+                p2_win=True
+            elif player2.gotomenu:
+                game=False
+                menu=False
+                p1_win=True
+                p2_win=False
             if bomb1quantity > 0:
                 bomb1quantity += 1
             if bomb1quantity > 30:
