@@ -45,7 +45,7 @@ for i in range(1, 7):
         powerupcoords.remove((i*64+2,j*64+2))
 #Defining these here because code crashes otherwise, they're just placeholders
 randompowerupcoords = (0,0)
-speedboost=powerup(randompowerupcoords[0],randompowerupcoords[1])
+speedboost=powerup(randompowerupcoords[0],randompowerupcoords[1],secrets.choice([1,2]))
 
 # generate players
 player1 = Player(34, 34,1)
@@ -76,20 +76,20 @@ def redrawGameWindow():
         bomb.walls = wall_list
         bomb.draw(screen)
         for expcheck in bomb.expboxlist:
-            if player1.rect.colliderect(expcheck):
+            if player1.rect.colliderect(expcheck) and not player1.shield:
                 player1.alive = False
                 player1.canmove = False
-            elif player2.rect.colliderect(expcheck):
+            elif player2.rect.colliderect(expcheck) and not player2.shield:
                 player2.alive = False
                 player2.canmove = False
     for bomb in bombs2:
         bomb.walls = wall_list
         bomb.draw(screen)
         for expcheck in bomb.expboxlist:
-            if player2.rect.colliderect(expcheck):
+            if player2.rect.colliderect(expcheck) and not player2.shield:
                 player2.alive = False
                 player2.canmove = False
-            elif player1.rect.colliderect(expcheck):
+            elif player1.rect.colliderect(expcheck) and not player1.shield:
                 player1.alive = False
                 player1.canmove = False
     #Detect collisions between player and player
@@ -101,25 +101,42 @@ def redrawGameWindow():
         player1.rect.x, player1.rect.y = placeholder_x1, placeholder_y1
     if player2.rect.colliderect(player1.rect):
         player2.rect.x, player2.rect.y = placeholder_x2, placeholder_y2
-    #Draw players, increment time with superspeed
+    #Draw players, increment time with superspeed, increment shieldcount and disable when enough time elapsed
     player1.draw(screen)
     if player1.superspeed:
         player1.superspeedcount+=1
+    if player1.shield:
+        player1.shieldcount+=1
+    if player1.shieldcount>300:
+        player1.shield=False
+        player1.shieldcount=0
     player2.draw(screen)
     if player2.superspeed:
         player2.superspeedcount+=1
+    if player2.shield:
+        player2.shieldcount+=1
+    if player2.shieldcount>300:
+        player2.shield=False
+        player2.shieldcount=0
     #Powerups
     speedboost.spawntimer+=1
     if player1.rect.colliderect(speedboost.rect):
         speedboost.exists=False
-        player1.superspeed=True
+        if speedboost.number==1:
+            player1.superspeed=True
+        elif speedboost.number==2:
+            player1.shield=True
     if player2.rect.colliderect(speedboost.rect):
         speedboost.exists=False
-        player2.superspeed = True
+        if speedboost.number == 1:
+            player2.superspeed = True
+        elif speedboost.number==2:
+            player2.shield=True
     if speedboost.exists==False:
         speedboost.respawntimer+=1
     if speedboost.respawntimer>200:
         speedboost.exists=True
+        speedboost.number = secrets.choice([1, 2])
         speedboost.respawntimer=0
         randompowerupcoords = secrets.choice(powerupcoords)
         while abs(randompowerupcoords[0] - player1.rect.x) < 16 or abs(randompowerupcoords[0] - player2.rect.x) < 16:
