@@ -394,7 +394,7 @@ def main():
             keys = pygame.key.get_pressed()
             # bomb mechanics
             # player1
-            if keys[pygame.K_SPACE] and bomb1quantity == 0:
+            if keys[pygame.K_SPACE] and bomb1quantity == 0 and player1.alive:
                 # player is left and up
                 if player1.rect.x % 32 < 16 and player1.rect.y % 32 < 16:
                     bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
@@ -413,7 +413,7 @@ def main():
                                     (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
                 bomb1quantity = 1
             # player2
-            if keys[pygame.K_SLASH] and bomb2quantity == 0:
+            if keys[pygame.K_SLASH] and bomb2quantity == 0 and player2.alive:
                 # player is left and up
                 if player2.rect.x % 32 < 16 and player2.rect.y % 32 < 16:
                     bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
