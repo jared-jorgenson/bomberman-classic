@@ -163,7 +163,7 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen):
         if self.number == 1:
-            screen.blit(pygame.image.load('Images/'+str(self.megabombcount)+'megabombs.png'), (2, 0))
+            screen.blit(pygame.image.load('Images2/'+str(self.megabombcount)+'megabombs.png'), (2, 0))
             if self.alive:
                 if self.front:
                     if self.shield:
@@ -242,7 +242,7 @@ class Player(pygame.sprite.Sprite):
                             screen.blit(self.p1walkRight[self.walkCount // 3], (self.rect.x, self.rect.y))
                             self.walkCount += 1
         elif self.number == 2:
-            screen.blit(pygame.image.load('Images/'+str(self.megabombcount)+'megabombs.png'), (415, 0))
+            screen.blit(pygame.image.load('Images2/'+str(self.megabombcount)+'megabombs.png'), (415, 0))
             if self.alive:
                 if self.front:
                     if self.shield:
@@ -357,9 +357,9 @@ class powerup(pygame.sprite.Sprite):
     shieldanimation = [pygame.image.load('Images/shield1.png'), pygame.image.load('Images/shield2.png'),
                            pygame.image.load('Images/shield3.png'), pygame.image.load('Images/shield3.png'),
                            pygame.image.load('Images/shield2.png'), pygame.image.load('Images/shield1.png')]
-    megabombanimation = [pygame.image.load('Images/megabombicon1.png'), pygame.image.load('Images/megabombicon2.png'),
-                       pygame.image.load('Images/megabombicon3.png'), pygame.image.load('Images/megabombicon3.png'),
-                       pygame.image.load('Images/megabombicon2.png'), pygame.image.load('Images/megabombicon1.png')]
+    megabombanimation = [pygame.image.load('Images2/megabombicon1.png'), pygame.image.load('Images2/megabombicon2.png'),
+                       pygame.image.load('Images2/megabombicon3.png'), pygame.image.load('Images2/megabombicon3.png'),
+                       pygame.image.load('Images2/megabombicon2.png'), pygame.image.load('Images2/megabombicon1.png')]
     def __init__(self, x, y, number):
         super().__init__()
         self.image = pygame.Surface([22, 28], pygame.SRCALPHA, 32)
@@ -428,17 +428,17 @@ class bomb(pygame.sprite.Sprite):
             if self.bomb_type==0:
                 screen.blit(pygame.image.load('Images/bomb3.png'), (self.rect.x, self.rect.y))
             else:
-                screen.blit(pygame.image.load('Images/megabomb3.png'), (self.rect.x, self.rect.y))
+                screen.blit(pygame.image.load('Images2/megabomb3.png'), (self.rect.x, self.rect.y))
         elif self.bomb_count < 60:
             if self.bomb_type == 0:
                 screen.blit(pygame.image.load('Images/bomb2.png'), (self.rect.x, self.rect.y))
             else:
-                screen.blit(pygame.image.load('Images/megabomb2.png'), (self.rect.x, self.rect.y))
+                screen.blit(pygame.image.load('Images2/megabomb2.png'), (self.rect.x, self.rect.y))
         elif self.bomb_count < 90:
             if self.bomb_type == 0:
                 screen.blit(pygame.image.load('Images/bomb1.png'), (self.rect.x, self.rect.y))
             else:
-                screen.blit(pygame.image.load('Images/megabomb1.png'), (self.rect.x, self.rect.y))
+                screen.blit(pygame.image.load('Images2/megabomb1.png'), (self.rect.x, self.rect.y))
         elif self.bomb_count < 120:
             if self.bomb_type==0:
                 for i in self.walls:
