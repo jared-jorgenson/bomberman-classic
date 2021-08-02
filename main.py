@@ -3,6 +3,8 @@ import secrets
 from classes import *
 from pygame import mixer
 
+#add visual indicators powerups active
+
 mixer.init()
 mixer.music.load("sounds/menu_music.mp3")
 mixer.music.set_volume(0.1)
@@ -45,7 +47,7 @@ for i in range(1, 7):
         powerupcoords.remove((i*64+2,j*64+2))
 #Defining these here because code crashes otherwise, they're just placeholders
 randompowerupcoords = (0,0)
-speedboost=powerup(randompowerupcoords[0],randompowerupcoords[1],secrets.choice([1,2]))
+activepowerup=powerup(randompowerupcoords[0],randompowerupcoords[1],secrets.choice([1,2,3]))
 
 # generate players
 player1 = Player(34, 34,1)
@@ -119,31 +121,43 @@ def redrawGameWindow():
         player2.shield=False
         player2.shieldcount=0
     #Powerups
-    speedboost.spawntimer+=1
-    if player1.rect.colliderect(speedboost.rect):
-        speedboost.exists=False
-        if speedboost.number==1:
+    activepowerup.spawntimer+=1
+    if player1.rect.colliderect(activepowerup.rect):
+        activepowerup.exists=False
+        activepowerup.rect.x=1000
+        if activepowerup.number==1:
             player1.superspeed=True
-        elif speedboost.number==2:
+        elif activepowerup.number==2:
             player1.shield=True
-    if player2.rect.colliderect(speedboost.rect):
-        speedboost.exists=False
-        if speedboost.number == 1:
+        elif activepowerup.number==3:
+            player1.megabombs=True
+            player1.megabombcount=5
+    if player1.megabombcount==0:
+        player1.megabombs=False
+    if player2.megabombcount==0:
+        player2.megabombs=False
+    if player2.rect.colliderect(activepowerup.rect):
+        activepowerup.exists=False
+        activepowerup.rect.x = 1000
+        if activepowerup.number == 1:
             player2.superspeed = True
-        elif speedboost.number==2:
+        elif activepowerup.number==2:
             player2.shield=True
-    if speedboost.exists==False:
-        speedboost.respawntimer+=1
-    if speedboost.respawntimer>200:
-        speedboost.exists=True
-        speedboost.number = secrets.choice([1, 2])
-        speedboost.respawntimer=0
+        elif activepowerup.number==3:
+            player2.megabombs=True
+            player2.megabombcount = 5
+    if activepowerup.exists==False:
+        activepowerup.respawntimer+=1
+    if activepowerup.respawntimer>200:
+        activepowerup.exists=True
+        activepowerup.number = secrets.choice([1,2,3])
+        activepowerup.respawntimer=0
         randompowerupcoords = secrets.choice(powerupcoords)
         while abs(randompowerupcoords[0] - player1.rect.x) < 16 or abs(randompowerupcoords[0] - player2.rect.x) < 16:
             randompowerupcoords = secrets.choice(powerupcoords)
-        speedboost.rect.x = randompowerupcoords[0]
-        speedboost.rect.y = randompowerupcoords[1]
-    speedboost.draw(screen)
+        activepowerup.rect.x = randompowerupcoords[0]
+        activepowerup.rect.y = randompowerupcoords[1]
+    activepowerup.draw(screen)
 def main():
     clock = pygame.time.Clock()
     FPS = 30
@@ -162,11 +176,15 @@ def main():
             randompowerupcoords = secrets.choice(powerupcoords)
             while abs(randompowerupcoords[0]-player1.rect.x) < 16 or abs(randompowerupcoords[0]-player2.rect.x) < 16:
                 randompowerupcoords = secrets.choice(powerupcoords)
-            speedboost.rect.x = randompowerupcoords[0]
-            speedboost.rect.y = randompowerupcoords[1]
-            speedboost.reset()
+            activepowerup.rect.x = randompowerupcoords[0]
+            activepowerup.rect.y = randompowerupcoords[1]
+            activepowerup.reset()
             player1.reset(34,34)
             player2.reset(419,289)
+            for i in bombs1:
+                i.bomb_count=120
+            for i in bombs2:
+                i.bomb_count=120
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -214,11 +232,15 @@ def main():
             randompowerupcoords = secrets.choice(powerupcoords)
             while abs(randompowerupcoords[0]-player1.rect.x) < 16 or abs(randompowerupcoords[0]-player2.rect.x) < 16:
                 randompowerupcoords = secrets.choice(powerupcoords)
-            speedboost.rect.x = randompowerupcoords[0]
-            speedboost.rect.y = randompowerupcoords[1]
-            speedboost.reset()
+            activepowerup.rect.x = randompowerupcoords[0]
+            activepowerup.rect.y = randompowerupcoords[1]
+            activepowerup.reset()
             player1.reset(34,34)
             player2.reset(419,289)
+            for i in bombs1:
+                i.bomb_count=120
+            for i in bombs2:
+                i.bomb_count=120
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -269,11 +291,15 @@ def main():
             randompowerupcoords = secrets.choice(powerupcoords)
             while abs(randompowerupcoords[0]-player1.rect.x) < 16 or abs(randompowerupcoords[0]-player2.rect.x) < 16:
                 randompowerupcoords = secrets.choice(powerupcoords)
-            speedboost.rect.x = randompowerupcoords[0]
-            speedboost.rect.y = randompowerupcoords[1]
-            speedboost.reset()
+            activepowerup.rect.x = randompowerupcoords[0]
+            activepowerup.rect.y = randompowerupcoords[1]
+            activepowerup.reset()
             player1.reset(34,34)
             player2.reset(419,289)
+            for i in bombs1:
+                i.bomb_count=120
+            for i in bombs2:
+                i.bomb_count=120
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -397,39 +423,79 @@ def main():
             if keys[pygame.K_SPACE] and bomb1quantity == 0 and player1.alive:
                 # player is left and up
                 if player1.rect.x % 32 < 16 and player1.rect.y % 32 < 16:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
-                                    (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0))
+                    if player1.megabombs:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32 + 3),
+                                           (player1.rect.y - player1.rect.y % 32 + 1), 32, 32, 0,1))
+                        player1.megabombcount-=1
+                    else:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
+                                        (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0,0))
                 # player is left and down
                 elif player1.rect.x % 32 < 16 and player1.rect.y % 32 >= 16:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
-                                    (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
+                    if player1.megabombs:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32 + 3),
+                                           (player1.rect.y - player1.rect.y % 32 + 33), 32, 32, 0, 1))
+                        player1.megabombcount -= 1
+                    else:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+3),
+                                        (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0,0))
                 # player is right and up
                 elif player1.rect.x % 32 >= 16 and player1.rect.y % 32 < 16:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
-                                    (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0))
+                    if player1.megabombs:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32 + 35),
+                                           (player1.rect.y - player1.rect.y % 32 + 1), 32, 32, 0, 1))
+                        player1.megabombcount -= 1
+                    else:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
+                                        (player1.rect.y - player1.rect.y % 32+1), 32, 32, 0,0))
                 # player is right and down
                 else:
-                    bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
-                                    (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0))
+                    if player1.megabombs:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32 + 35),
+                                           (player1.rect.y - player1.rect.y % 32 + 33), 32, 32, 0, 1))
+                        player1.megabombcount -= 1
+                    else:
+                        bombs1.append(bomb((player1.rect.x - player1.rect.x % 32+35),
+                                        (player1.rect.y - player1.rect.y % 32+33), 32, 32, 0,0))
                 bomb1quantity = 1
             # player2
             if keys[pygame.K_SLASH] and bomb2quantity == 0 and player2.alive:
                 # player is left and up
                 if player2.rect.x % 32 < 16 and player2.rect.y % 32 < 16:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
-                                    (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0))
+                    if player2.megabombs:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32 + 3),
+                                           (player2.rect.y - player2.rect.y % 32 + 1), 32, 32, 0,1))
+                        player2.megabombcount -= 1
+                    else:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
+                                        (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0,0))
                 # player is left and down
                 elif player2.rect.x % 32 < 16 and player2.rect.y % 32 >= 16:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
-                                    (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
+                    if player2.megabombs:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32 + 3),
+                                           (player2.rect.y - player2.rect.y % 32 + 33), 32, 32, 0, 1))
+                        player2.megabombcount -= 1
+                    else:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+3),
+                                    (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0,0))
                 # player is right and up
                 elif player2.rect.x % 32 >= 16 and player2.rect.y % 32 < 16:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
-                                    (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0))
+                    if player2.megabombs:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32 + 35),
+                                           (player2.rect.y - player2.rect.y % 32 + 1), 32, 32, 0, 1))
+                        player2.megabombcount -= 1
+                    else:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
+                                    (player2.rect.y - player2.rect.y % 32+1), 32, 32, 0,0))
                 # player is right and down
                 else:
-                    bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
-                                    (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0))
+                    if player2.megabombs:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32 + 35),
+                                           (player2.rect.y - player2.rect.y % 32 + 33), 32, 32, 0, 1))
+                        player2.megabombcount -= 1
+                    else:
+                        bombs2.append(bomb((player2.rect.x - player2.rect.x % 32+35),
+                                    (player2.rect.y - player2.rect.y % 32+33), 32, 32, 0,0))
                 bomb2quantity = 1
             redrawGameWindow()
             pygame.display.flip()
